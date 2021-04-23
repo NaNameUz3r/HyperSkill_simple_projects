@@ -1,1 +1,1 @@
-This is simple dominoe game against AI.
+This is a simple domino vs AI game.
