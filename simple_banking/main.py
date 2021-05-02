@@ -1,4 +1,4 @@
-import random
+iimport random
 import sqlite3
 import itertools
 
@@ -6,15 +6,13 @@ db_container = sqlite3.connect('card.s3db')
 
 
 def check_and_create_db():
-    try:
-        db_cursor = db_container.cursor()
-        db_cursor.execute("CREATE TABLE card("
-                          "id INTEGER, "
-                          "number TEXT, "
-                          "pin TEXT, "
-                          "balance INTEGER DEFAULT 0);")
-    except sqlite3.OperationalError:
-        pass
+
+    db_cursor = db_container.cursor()
+    db_cursor.execute("CREATE TABLE IF NOT EXISTS card("
+                      "id INTEGER, "
+                      "number TEXT, "
+                      "pin TEXT, "
+                      "balance INTEGER DEFAULT 0);")
 
 
 def take_user_command():
