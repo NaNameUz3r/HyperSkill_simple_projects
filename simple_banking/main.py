@@ -2,8 +2,6 @@ import random
 import sqlite3
 import itertools
 
-db_container = sqlite3.connect('card.s3db')
-
 
 def check_and_create_db():
 
@@ -13,6 +11,33 @@ def check_and_create_db():
                       "number TEXT, "
                       "pin TEXT, "
                       "balance INTEGER DEFAULT 0);")
+
+
+def main():
+    while True:
+
+        command = take_user_command()
+
+        if command.isdigit() and command == "1":
+            create_user_account()
+
+        elif command.isdigit() and command == "2":
+
+            user_number = input("\nEnter your card number:\n")
+            user_pin = input("Enter your PIN:\n")
+
+            if is_account_exist(user_number) and (
+                    is_pin_correct(user_number, user_pin)
+            ):
+
+                processing_logged_user(user_number)
+
+            else:
+                print("Wrong card number or PIN!\n")
+
+        elif command.isdigit() and command == "0":
+            print("\nBye!")
+            exit(0)
 
 
 def take_user_command():
@@ -106,6 +131,8 @@ def is_account_exist(user_number):
     db_cursor.execute("SELECT number FROM card")
     results = db_cursor.fetchall()
     results = [i for i in itertools.chain(*results)]
+    print(results)
+    print(user_number in results)
     return user_number in results
 
 
@@ -200,19 +227,26 @@ def process_money_transfer(source_card):
     destination_card = input("\nTransfer\n"
                              "Enter card number:\n")
 
-    if is_luhn_checksum(destination_card) and (
+    if not is_luhn_checksum(destination_card):
+        print("Probably you made a mistake in the card number. Please try again!\n")
+        return False
+    elif not is_account_exist(destination_card):
+        print("Such a card does not exist.\n")
+        return
+    elif destination_card == source_card:
+        print("You can't transfer money to the same account\n")
+        return False
+    elif is_luhn_checksum(destination_card) and (
         is_account_exist(destination_card) or
-        destination_card == source_card
+        destination_card != source_card
     ):
         transfer_amount = request_transfer_amount()
         if transfer_amount <= fetch_user_balance(source_card):
             make_transaction(source_card, destination_card, transfer_amount)
+            return True
         else:
             print("Not enough money!\n")
-            return
-    else:
-        print("Probably you made a mistake in the card number. Please try again!\n")
-        return
+            return False
 
 
 def request_transfer_amount():
@@ -251,33 +285,7 @@ def close_account(card_number):
     print("\nThe account has been closed!\n")
 
 
-def main():
-    while True:
-
-        command = take_user_command()
-
-        if command.isdigit() and command == "1":
-            create_user_account()
-
-        elif command.isdigit() and command == "2":
-
-            user_number = input("\nEnter your card number:\n")
-            user_pin = input("Enter your PIN:\n")
-
-            if is_account_exist(user_number) and (
-                    is_pin_correct(user_number, user_pin)
-            ):
-
-                processing_logged_user(user_number)
-
-            else:
-                print("Wrong card number or PIN!\n")
-
-        elif command.isdigit() and command == "0":
-            print("\nBye!")
-            exit(0)
-
-
+db_container = sqlite3.connect('card.s3db')
 check_and_create_db()
 main()
 db_container.close()
