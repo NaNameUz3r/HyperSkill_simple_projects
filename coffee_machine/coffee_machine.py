@@ -24,7 +24,6 @@ def main():
 
 
 def status_printer():
-    global remainings
 
     print("The coffee machine has:")
     print(str(remainings['water']), " of water")
@@ -44,7 +43,6 @@ def buy():
 
 
 def fill():
-    global remainings
 
     add_water = int(input("Write how many ml of water do you want to add:"))
     remainings['water'] += add_water
@@ -59,13 +57,12 @@ def fill():
 
 
 def take():
-    global remainings
+
     print("I gave you $", remainings['money'])
     remainings['money'] = 0
 
 
 def amount_checker(cup):
-    global remainings
 
     if cup == 1:
         if remainings['water'] < 250:
@@ -103,7 +100,6 @@ def amount_checker(cup):
 
 
 def coffee_maker(cup):
-    global remainings
 
     status = amount_checker(cup)
     # espresso
