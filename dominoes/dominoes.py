@@ -1,7 +1,7 @@
 import random
 
 
-def rules():
+def print_welcome_rules():
 
     print("""
     
@@ -26,7 +26,7 @@ Good luck buddy!
     _ = input('Press Enter to start game!')
 
 
-def message(stock, computer, snake_pieces, player):
+def print_game_condition(stock, computer, snake_pieces, player):
     if len(snake_pieces) > 6:
         print('=' * 70,
               '\nStock size:', len(stock),
@@ -43,14 +43,15 @@ def message(stock, computer, snake_pieces, player):
         print('{}:{}'.format(piece + 1, player[piece]))
 
 
-def winner(computer_check, snake_check, player_check, stock):
+def check_game_status(computer_check, snake_check, player_check, stock):
     if len(player_check) == 0:
         print('\nStatus: The game is over. You won!')
         return True
     if len(computer_check) == 0:
         print('\nStatus: The game is over. The computer won!')
         return True
-    if snake_check[0][0] == snake_check[-1][1] and sum(x.count(snake_check[0][0]) for x in snake_check) == 8:
+    if snake_check[0][0] == snake_check[-1][1] and (
+            sum(x.count(snake_check[0][0]) for x in snake_check) == 8):
         print('\nStatus: The game is over. It\'s a draw!')
         return True
     if stock == [] and pass_counter >= 2:
@@ -58,7 +59,7 @@ def winner(computer_check, snake_check, player_check, stock):
         return True
 
 
-rules()
+print_welcome_rules()
 
 
 while True:
@@ -93,11 +94,11 @@ while True:
         break
 
 
-message(stock_pieces, computer_pieces, snake, player_pieces)
+print_game_condition(stock_pieces, computer_pieces, snake, player_pieces)
 
 while True:
 
-    if winner(computer_pieces, snake, player_pieces, stock_pieces):
+    if check_game_status(computer_pieces, snake, player_pieces, stock_pieces):
         break
 
     if next_move == 'player':
@@ -215,5 +216,5 @@ while True:
                 next_move = 'player'
                 break
 
-    message(stock_pieces, computer_pieces, snake, player_pieces)
+    print_game_condition(stock_pieces, computer_pieces, snake, player_pieces)
 
