@@ -61,7 +61,7 @@ def check_game_status(computer_check, snake_check, player_check, stock):
 
 print_welcome_rules()
 
-
+# Game initialization
 while True:
     stock_pieces = [[x, y] for x in range(0, 7) for y in range(x, 7)]
     computer_pieces, player_pieces, snake = [list() for _ in range(0, 3)]
@@ -96,6 +96,7 @@ while True:
 
 print_game_condition(stock_pieces, computer_pieces, snake, player_pieces)
 
+# Interactive game part
 while True:
 
     if check_game_status(computer_pieces, snake, player_pieces, stock_pieces):
@@ -175,7 +176,6 @@ while True:
         domino_values = dict(domino_values)
         play_pieces_indexes = [*domino_values]
 
-        # while True:
         for i in play_pieces_indexes:
 
             move = play_pieces_indexes[i] + 1
