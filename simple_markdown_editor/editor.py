@@ -18,7 +18,10 @@ def start_editor():
             if user_input == special_commands[0]:
                 print(help_message)
             elif user_input == special_commands[1]:
+                save_markdown(processed_text)
                 return True
+            elif user_input == special_commands[2]:
+                exit(0)
         else:
             print(error_message)
             continue
@@ -77,6 +80,11 @@ def markdown_list(ordered=True):
                 else:
                     rows_to_process += f'* {new_row}'
             return rows_to_process
+
+
+def save_markdown(text_to_save):
+    with open("output.md", "w") as markdown_file:
+        markdown_file.write(text_to_save)
 
 
 if __name__ == '__main__':
